@@ -30,7 +30,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemTitle.setText(localDataSet[position]);
+        String[] curr = localDataSet[position].split("_");
+        int currLength = curr.length;
+        holder.itemTitle.setText(curr[0]);
+        switch (currLength) {
+            case 5:  {
+                holder.tag4.setText(curr[4]);
+                holder.tag4.setVisibility(View.VISIBLE);
+            }
+            case 4:  {
+                holder.tag3.setText(curr[3]);
+                holder.tag3.setVisibility(View.VISIBLE);
+            }
+            case 3:  {
+                holder.tag2.setText(curr[2]);
+                holder.tag2.setVisibility(View.VISIBLE);
+            }
+            case 2:  {
+                holder.tag1.setText(curr[1]);
+                holder.tag1.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     @Override
@@ -41,12 +62,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public static class ViewHolder extends  RecyclerView.ViewHolder {
         private ImageView itemImage;
         private TextView itemTitle;
+        private TextView tag1;
+        private TextView tag2;
+        private TextView tag3;
+        private TextView tag4;
 
         public ViewHolder(View view) {
             super(view);
 
             itemTitle = (TextView) view.findViewById(R.id.itemTitle);
             itemImage = (ImageView) view.findViewById(R.id.itemImage);
+            tag1 = (TextView) view.findViewById(R.id.firstTag);
+            tag2 = view.findViewById(R.id.secondTag);
+            tag3 = view.findViewById(R.id.thirdTag);
+            tag4 = view.findViewById(R.id.fourthTag);;
 
             view.setOnClickListener(new View.OnClickListener() {
                 private int position;
