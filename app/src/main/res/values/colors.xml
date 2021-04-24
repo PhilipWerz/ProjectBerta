@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_blue">#529FE2</color>
     <color name="searchBar">#C5C5C5</color>
+    <color name="emojiColor">#FFBB00</color>
+    <color name="danger">#FF0303</color>
 </resources>
