@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Project Berta</string>
+    <string name="stay_safe">stay safe</string>
+    <string name="hey_paul">Hey Paul</string>
+    <string name="d">:D</string>
+    <string name="achtung">Achtung</string>
 </resources>
