@@ -1,82 +1,153 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.media.tv.TvContract;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+public class signup extends AppCompatActivity {
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+    EditText edtEmailAddress, edtPassword, edtConfirmPassword;
+    Button btnSignUp;
+    ProgressBar progressBar;
+    LinearLayout lvparent;
 
-public class data_pull {
-    private final String SERVERNAME = "localhost";
-    private final String
-    private final String USERNAME = "phpmyadmin";
-    private final String Passwort = "berta!data";
-    private final String DBNAME="Geschaefte";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.signup);
 
+        edtEmailAddress = findViewById(R.id.edtEmailAddress);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        btnSignUp = findViewById(R.id.btnSignUp);
+        progressBar = findViewById(R.id.pbbar);
+        lvparent = findViewById(R.id.lvparent);
+        this.setTitle("User SignUp");
 
-    private void downloadJSON(final String urlWebService) {
-
-
-        class DownloadJSON extends AsyncTask<Void, Void, String> {
-
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
+            public void onClick(View v) {
 
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                try {
-                    loadIntoListView(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (isEmpty(edtEmailAddress.getText().toString()) ||
+                        isEmpty(edtPassword.getText().toString()) ||
+                        isEmpty(edtConfirmPassword.getText().toString()))
+                    ShowSnackBar("Please enter all fields");
+                else if (!edtPassword.getText().toString().equals(edtConfirmPassword.getText().toString()))
+                    ShowSnackBar("Password does not match");
+                else {
+                    AddUsers addUsers = new AddUsers();
+                    addUsers.execute("");
                 }
-            }
 
-            @Override
-            protected String doInBackground(Void... voids) {
-                try {
-                    URL url = new URL(urlWebService);
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    StringBuilder sb = new StringBuilder();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String json;
-                    while ((json = bufferedReader.readLine()) != null) {
-                        sb.append(json + "\n");
+            }
+        });
+    }
+
+    public void ShowSnackBar(String message) {
+        Snackbar.make(lvparent, message, Snackbar.LENGTH_LONG)
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                     }
-                    return sb.toString().trim();
-                } catch (Exception e) {
-                    return null;
-                }
-            }
-        }
-        DownloadJSON getJSON = new DownloadJSON();
-        getJSON.execute();
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 
-    private void loadIntoListView(String json) throws JSONException {
-        JSONArray jsonArray = new JSONArray(json);
-        String[] stocks = new String[jsonArray.length()];
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
-            stocks[i] = obj.getString("name") + " " + obj.getString("price");
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stocks);
-        listView.setAdapter(arrayAdapter);
+    public Boolean isEmpty(String strValue) {
+        if (strValue == null || strValue.trim().equals(("")))
+            return true;
+        else
+            return false;
     }
+
+    private class AddUsers extends AsyncTask<String, Void, String> {
+        String emailId, password;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            emailId = edtEmailAddress.getText().toString();
+            password = edtPassword.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
+            btnSignUp.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                ConnectionHelper con = new ConnectionHelper();
+                Connection connect = ConnectionHelper.CONN();
+
+                String queryStmt = "Insert into tblUsers " +
+                        " (UserId,Password,UserRole) values "
+                        + "('"
+                        + emailId
+                        + "','"
+                        + password
+                        + "','User')";
+
+                PreparedStatement preparedStatement = connect
+                        .prepareStatement(queryStmt);
+
+                preparedStatement.executeUpdate();
+
+                preparedStatement.close();
+
+                return "Added successfully";
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return e.getMessage().toString();
+            } catch (Exception e) {
+                return "Exception. Please check your code and database.";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            //Toast.makeText(signup.this, result, Toast.LENGTH_SHORT).show();
+            ShowSnackBar(result);
+            progressBar.setVisibility(View.GONE);
+            btnSignUp.setVisibility(View.VISIBLE);
+            if (result.equals("Added successfully")) {
+                // Clear();
+            }
+
+        }
+    }
+
 }
