@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
-    private ArrayList<String> countryList = new ArrayList<String>();
+    private ArrayList<String> storeList = new ArrayList<>();
     private String[] displayList = new String[11];
 
 
@@ -48,22 +48,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        storeList.add("Germany_FFP2_Click&Collect_Test Pflicht");
+        storeList.add("USA_FFP2_Eis");
+        storeList.add("Brazil_FFP2");
+        storeList.add("Canada_FFP2");
+        storeList.add("Italy_FFP2");
+        storeList.add("Sweden_FFP2");
+        storeList.add("Austria_FFP2");
+        storeList.add("China_FFP2");
+        storeList.add("Russia_FFP2_Test Notwendig");
+        storeList.add("Spain");
+        storeList.add("Netherlands_FFP2");
 
 
-        countryList.add("Germany_FFP2_Click&Collect_Test Pflicht");
-        countryList.add("USA_FFP2_Eis");
-        countryList.add("Brazil_FFP2");
-        countryList.add("Canada_FFP2");
-        countryList.add("Italy_FFP2");
-        countryList.add("Sweden_FFP2");
-        countryList.add("Austria_FFP2");
-        countryList.add("China_FFP2");
-        countryList.add("Russia_FFP2_Test Notwendig");
-        countryList.add("Spain");
-        countryList.add("Netherlands_FFP2");
+        displayList = storeList.toArray(new String[11]);
 
-
-        displayList = countryList.toArray(new String[11]);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerAdapter = new RecyclerAdapter(displayList);
