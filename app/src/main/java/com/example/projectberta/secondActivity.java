@@ -19,7 +19,7 @@ public class secondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second);
 
-        countryList.add("Germany_FFP2_Click&Collect_Test Pflicht");
+        countryList.add("Germany_FFP2_Click&Collect_Test Pflicht_Reservierung");
         countryList.add("USA_FFP2_Eis");
         countryList.add("Brazil_FFP2");
         countryList.add("Canada_FFP2");
@@ -28,7 +28,7 @@ public class secondActivity extends AppCompatActivity {
         countryList.add("Austria_FFP2");
         countryList.add("China_FFP2");
         countryList.add("Russia_FFP2_Test Notwendig");
-        countryList.add("Spain_FFP2");
+        countryList.add("Spain");
         countryList.add("Netherlands_FFP2");
 
 

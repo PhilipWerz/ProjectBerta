@@ -1,6 +1,8 @@
 package com.example.projectberta;
 
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         String[] curr = localDataSet[position].split("_");
         int currLength = curr.length;
         holder.itemTitle.setText(curr[0]);
+        holder.tag1.setVisibility(View.INVISIBLE);
+        holder.tag2.setVisibility(View.INVISIBLE);
+        holder.tag3.setVisibility(View.INVISIBLE);
+        holder.tag4.setVisibility(View.INVISIBLE);
+
         switch (currLength) {
             case 5:  {
                 holder.tag4.setText(curr[4]);
@@ -51,7 +58,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 holder.tag1.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
     @Override
