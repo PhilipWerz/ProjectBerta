@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mySearchView = findViewById(R.id.searchBar);
 
         myButton = findViewById(R.id.settingsIcon);
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                openNewActivity();
             }
         });
-
         storeList.add("Germany_FFP2_Click&Collect_Test Pflicht");
         storeList.add("USA_FFP2_Eis");
         storeList.add("Brazil_FFP2");
